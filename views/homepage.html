@@ -1,0 +1,577 @@
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> student zone intern test</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <style type="text/css">
+    #contacts p, 
+    #contacts p.lead{
+      margin: 0;
+    }
+    .authenticated{
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .unauthenticated{
+      display: none;
+    }
+    .modal-header:last-child{
+      border-bottom: 0;
+    }
+  </style>
+</head>
+<body data-gr-c-s-loaded="true" class="">
+  <div class="container">
+    <span class="userAuth authenticated pull-right">
+        <button type="button" id="reg" class="btn btn-primary" data-toggle="modal" data-target="#registerModal" style="visibility: visible;">Register</button>
+        <button type="button" id="log" class="btn btn-success" data-toggle="modal" data-target="#loginModal" style="visibility: visible;">Login</button>
+        <button id="doLogout" class="btn btn-action hide">Logout</button>
+    </span>
+    <h1>MovieTime</h1>
+    <hr>
+    <div class="row unauthenticated">
+      <center>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addContactModal">Add Contact</button>
+      </center>
+      <div class="col-md-6">
+        <ul id="contacts" class="list-group">
+          <!-- Conatct Object li.list-group-item.contact will be added here by js -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="content" style="display: none;">
+
+    <div class="panel panel-default"> 
+    <div class="panel-heading">Select</div> 
+    <div class="panel-body"> 
+    </div> 
+    <table class="table"> 
+    <thead> 
+    <tr> 
+    <th>College</th> 
+    <th>Department</th> 
+    <th>Branch</th>
+    <th>Semester</th> 
+    <th>Year</th> 
+    </tr>
+     </thead> 
+     <tbody> 
+     <tr> 
+     <td>
+     <select id="college" style="visibility: hidden;"></select>
+      </td> 
+     <td><select id="department" style="visibility: hidden;"></select></td> 
+     <td><select id="branch" style="visibility: hidden;"></select></td>
+     <td><select id="semester" style="visibility: hidden;"></select></td>
+     <td><select id="year" style="visibility: hidden;"></select></td>
+     </tr> 
+        </tbody> 
+        </table> 
+        </div>
+
+    <div class="panel panel-primary"> 
+    <div class="panel-heading"> 
+    <h3 class="panel-title">Download Your Question Paper</h3> 
+    </div> 
+    <div class="panel-body">
+    <h2 id="quest-pap"></h2>
+    <a href="">Download Question Paper</a>
+    </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="Register" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="registerModalLabel">Register</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">First Name:</label>
+            <input type="text" class="form-control" id="registerFirstName">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Last Name:</label>
+            <input type="text" class="form-control" id="registerLastName">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Email:</label>
+            <input type="text" class="form-control" id="registerEmail">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Password:</label>
+            <input type="password" class="form-control" id="registerPassword">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Confirm Password:</label>
+            <input type="password" class="form-control" id="registerConfirmPassword">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="doRegister">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="loginModalLabel">Login</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Email:</label>
+            <input type="text" class="form-control" id="loginEmail">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Password:</label>
+            <input type="password" class="form-control" id="loginPassword">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="doLogin">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="Add Contact" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" name="contactForm">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="addContactModalLabel">Add Contact</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" required="" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" required="" placeholder="Enter Email">
+            </div>
+            <h3>Location</h3>
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" class="form-control" id="city" placeholder="Enter City">
+            </div>
+            <div class="form-group">
+              <label for="email">State</label>
+              <input type="text" class="form-control" id="state" placeholder="Enter State">
+            </div>
+            <div class="form-group">
+              <label for="zip">Zip</label>
+              <input type="text" class="form-control" id="zip" placeholder="Enter Zip Code">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary addValue">Submit</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="Message" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="messageModalLabel">Message</h4>
+        </div>
+        <div class="modal-footer">
+          <div class="pre-auth">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <span class="">
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
+              <button type="submit" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Login</button>
+            </span>
+          </div>
+          <div class="post-auth"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <!-- Latest compiled and minified Bootstrap -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <!-- Include Firebase Library -->
+  <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+  <!-- Contacts Store JavaScript -->
+ 
+ <script type="text/JavaScript">
+  	/*(function() {*/	
+
+// Initialize Firebase
+	  var config = {
+		apiKey: "AIzaSyANY_2vDft58dl6jD-LmP29WDgVZfqzRXI",
+		authDomain: "login-signup-dd7e2.firebaseapp.com",
+		databaseURL: "https://login-signup-dd7e2.firebaseio.com",
+		projectId: "login-signup-dd7e2",
+		storageBucket: "login-signup-dd7e2.appspot.com",
+		messagingSenderId: "624246128442"
+	  };
+	  console.log("initialization called");
+
+	  firebase.initializeApp(config);
+
+	  firebase.auth().signOut();
+	  
+	  const txtEmail=document.getElementById('loginEmail');
+	  const txtPassword=document.getElementById('loginPassword');
+	  const btnLogin=document.getElementById('doLogin');
+	  const btnSignup=document.getElementById('doRegister');
+	  const regEmail=document.getElementById('registerEmail');
+	  const regPassword=document.getElementById('registerPassword');
+	  const regFirstName=document.getElementById('registerFirstName');
+	  const regLastName=document.getElementById('registerLastName');
+	  const regConfPassword=document.getElementById('registerConfirmPassword');
+	  const btnLogout=document.getElementById('doLogout');
+
+	  //Add Login Event
+	  btnLogin.addEventListener('click', e => { 
+	  	const email=txtEmail.value;
+	  	const pass=txtPassword.value;
+	  	const auth=firebase.auth();
+	  	var atpos,dotpos;
+	  	atpos=email.indexOf("@");
+	  	console.log(atpos);
+		dotpos = email.lastIndexOf(".");
+		console.log(dotpos);
+		database=firebase.database();
+
+	  	if((email=="" && pass=="") || (email=="" || pass=="")){
+	  		alert("Please Fill the Form");
+	  		document.getElementById("loginEmail").focus();
+	  	}
+	  	else if(email!="" && pass!=""){
+	  		if (atpos < 1 || ( dotpos - atpos < 2 )) {
+			    alert("Please Enter Correct Email Form");
+		        document.getElementById("loginEmail").focus() ; 
+		        $('#department').empty();
+			  	$('#branch').empty();
+			  	$('#semester').empty();
+			  	$('#year').empty();
+			}
+			else{
+				//Sign In
+			  	const promise=auth.signInWithEmailAndPassword(email,pass);
+			  	console.log(promise);
+			  	 $('#loginModal').modal('hide');
+			  	 $('h1').text('Question Paper Tab');   
+
+			  	 var ref=database.ref('question paper');
+			  	 ref.on('value',gotData,errData);
+
+			  	 function gotData(data){
+
+			  	 	var streamsel;
+			  	 	var dept;
+			  	 	var sem;
+			  	 	var year;
+			  	 	
+			  	 	console.log(data.val());
+			  	 	var paperdata=data.val();
+			  	 	var keys=Object.keys(paperdata);
+			  	 	console.log("Keys: "+keys);
+			  	 	console.log(keys.length);
+			  	 	$('#college').empty();
+			  	 	$('#department').empty();
+			  	 	$('#branch').empty();
+			  	 	$('#semester').empty();
+			  	 	$('#year').empty();
+
+			  	 	$('#college').append($('<option>', {
+						    value: "#",
+						    text: "Select Option"
+						}));
+
+			  	 	for(i=0;i<keys.length;i++){
+			  	 		var k=keys[i];
+			  	 		console.log("College: "+k);//this gives the college values
+
+			  	 		
+			  	 		$('#college').append($('<option>', {
+						    value: k,
+						    text: k
+						}));
+			  	 	}
+
+			  	 	$("#college").change(function() {
+			  	 		$('#department').empty();
+			  	 		$('#branch').empty();
+			  	 		$('#semester').empty();
+			  	 		$('#year').empty();
+						    // jQuery
+						var selectedcol = $(this).find(':selected').val();
+						var selectedText = $(this).find(':selected').text();
+						
+						streamsel=paperdata[selectedcol].stream;//object provider
+						console.log(streamsel);
+						var streamkeys=Object.keys(streamsel);
+						console.log(streamkeys);
+						console.log(streamkeys.length);
+						
+						$('#department').append($('<option>', {
+						    value: "#",
+						    text: "Select Option"
+						}));
+
+						for(s=0;s<streamkeys.length;s++){
+
+					  		$('#department').append($('<option>', {
+					    	value: streamkeys[s],
+					    	text: streamkeys[s]
+							}));
+					  	}
+
+					  	console.log(streamsel);
+					  	var temp=streamsel;
+					  	$("#department").change(function(){
+					  		$('#branch').empty();
+					  		$('#semester').empty();
+			  	 			$('#year').empty();
+							var selecteddept = $(this).find(':selected').val();
+							console.log(selecteddept);
+
+							console.log(temp);
+							dept=streamsel[selecteddept];//this variable is not constant 
+				  	 		console.log(dept);
+				  	 		var branchkeys=Object.keys(dept);
+				  	 		//console.log(Object.keys(stream[MBA]));
+				  	 		console.log("Branch: "+branchkeys);//this gives the branch values
+				  	 		
+				  	 		$('#branch').append($('<option>', {
+							    value: "#",
+							    text: "Select Option"
+							}));
+
+				  	 		for(b=0;b<branchkeys.length;b++){
+						  		$('#branch').append($('<option>', {
+						    	value: branchkeys[b],
+						    	text: branchkeys[b]
+								}));
+						  	}
+
+						  	$('#branch').change(function(){
+								$('#semester').empty();
+								$('#year').empty();
+								var selectedbranch= $(this).find(':selected').val();
+								console.log(selectedbranch);
+
+								sem=dept[selectedbranch];
+								console.log(sem);
+								var semkeys=Object.keys(sem);
+								console.log("semester"+ semkeys);
+
+								$('#semester').append($('<option>', {
+								    value: "#",
+								    text: "Select Option"
+								}));
+
+					  	 		for(b=0;b<semkeys.length;b++){
+							  		$('#semester').append($('<option>', {
+							    	value: semkeys[b],
+							    	text: semkeys[b]
+									}));
+							  	}
+
+							  	$('#semester').change(function(){
+							  		$('#year').empty();
+							  		var selectedsem=$(this).find(':selected').val();
+
+							  		year=sem[selectedsem];
+							  		console.log(year);
+							  		var yearkeys=Object.keys(year);
+							  		console.log("YEAR"+yearkeys);
+
+							  		$('#year').append($('<option>', {
+									    value: "#",
+									    text: "Select Option"
+									}));
+
+							  		for(b=0;b<yearkeys.length;b++){
+								  		$('#year').append($('<option>', {
+								    	value: yearkeys[b],
+								    	text: yearkeys[b]
+										}));
+								  	}
+
+								  	$('#year').change(function(){
+								  		var selectedyear=$(this).find(':selected').val();
+
+								  		var paperyear=year[selectedyear];
+								  		console.log(selectedyear);
+								  		console.log(paperyear);
+								  		$('#quest-pap').text(selectedyear);
+								  		$("a").attr("href", paperyear)  
+
+								  	});
+
+							  	});
+
+							});
+
+						});
+						
+					});
+			  	 }
+
+			  	 function errData(err){
+			  	 	console.log(err);
+			  	 }
+
+			  	promise.catch(e =>{
+			  		alert(e.message);
+			  		$('#loginModal').modal('show');
+			  	});
+			}
+	  	} 	
+	  });
+
+	  //Add SignUp Event
+	  btnSignup.addEventListener('click', e => {
+	  	
+	  	const regEm=regEmail.value;
+	  	const regPass=regPassword.value;
+	  	const regConfPass=regConfPassword.value;
+	  	const regFName=regFirstName.value;
+	  	const regLName=regLastName.value;
+	  	const auth=firebase.auth();
+	  	var atpos,dotpos;
+	  	atpos=regEm.indexOf("@");
+		dotpos = regEm.lastIndexOf(".");
+		var eml=regEm.substring(atpos+1,dotpos);
+		console.log(eml);
+		var emf = regEm.substring(0, atpos);
+	  	console.log(emf);
+		var pattern=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+		var pattern2=/^([a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*$/;//regex for email part before @
+		var pattern3=/^([a-z])*$/;//regex for email part after @
+
+
+		if(regEm=="" || regPass=="" || regConfPass=="" || regFName=="" || regLName==""){
+			alert("Please Fill the Form");
+			regFirstName.focus();
+		}
+		else if(regEm!="" && regPass!="" && regConfPass!="" && regFName!="" && regLName!=""){
+			
+			if (atpos < 1 || ( dotpos - atpos < 2 )) {
+				alert("Please Enter Correct Email For");
+				regEmail.focus() ; 
+			}
+			else if(!pattern2.test(emf) || !pattern3.test(eml)){
+				alert("Incorrect email form");
+				regEmail.focus();
+			}
+			else if(!pattern.test(regEm)){
+				alert("Email Address Invalid. Please Enter correct email");
+			}
+			else if((regFName.length<3 || regFName.length>20) || (regLName.length<3 || regLName.length>20)){
+				alert("The Length of first and last name should be greater than 5 characters and less than 10 characters");
+				regFirstName.focus();
+			}
+			else if(/^[A-Za-z\s]+$/.test(regFName)==false ||/^[A-Za-z\s]+$/.test(regLName)==false){
+				alert("Name should only contain Characters");
+			}
+			else{
+				if(regPass==regConfPass){
+					if(regPass.length>6){
+						var userId=Math.floor(Math.random() * 1000) + 1  ;
+						console.log(userId);
+						//Sign Up
+					  	const promise=auth.createUserWithEmailAndPassword(regEm,regPass);
+					  	console.log(regEm+regPass+regFName+regLName);
+					  	if(regPass==regConfPass){
+					  		var firebaseRef=firebase.database().ref('users/'+userId);
+							firebaseRef.set({
+							Name:regFName+" "+regLName,
+							Email:regEm,
+							Password:regPass
+						});	
+						console.log("SignUp Successful");
+						$('#registerModal').modal('hide');
+						$('#loginModal').modal('show');
+					  	}
+					  	promise.catch(e => console.log(e.message));
+					}
+					else{
+						alert("Password should be atleast 6 characters");
+						regPassword.focus();
+					}
+				}
+				else{
+					alert("Passwords Do Not Match");
+					regPassword.focus();
+				}
+			}
+		}
+	  });
+
+	  btnLogout.addEventListener('click', e => {
+	  	firebase.auth().signOut();
+	  });
+
+	  firebase.auth().onAuthStateChanged(firebaseUser => {
+	  	if(firebaseUser){
+	  		console.log(firebaseUser.uid);
+	  		btnLogout.classList.remove('hide');
+	  		$('#content').show();
+	  		document.getElementById('log').style.visibility="hidden";
+	  		document.getElementById('reg').style.visibility = "hidden";
+	  		document.getElementById('college').style.visibility="visible";
+	  		document.getElementById('department').style.visibility="visible";
+	  		document.getElementById('branch').style.visibility="visible";
+	  		document.getElementById('semester').style.visibility="visible";
+	  		document.getElementById('year').style.visibility="visible";
+	  		//document.getElementById('content').style.visibility="visible";
+
+
+	  	}else{
+	  		console.log('not logged in'); 
+	  		btnLogout.classList.add('hide');
+	  		document.getElementById('log').style.visibility="visible";
+	  		document.getElementById('reg').style.visibility = "visible";
+	  		$('h1').text('Contact Store Application');  
+	  		//$("#table_body").text('');
+	  		$('#college').empty();
+	  		document.getElementById('college').style.visibility="hidden";
+	  		$('#department').empty();
+	  		document.getElementById('department').style.visibility="hidden";
+	  		$('#branch').empty();
+	  		document.getElementById('branch').style.visibility="hidden";
+	  		$('#semester').empty();
+	  		document.getElementById('semester').style.visibility="hidden";
+	  		$('#year').empty();
+	  		document.getElementById('year').style.visibility="hidden";
+	  		//document.getElementById('content').style.visibility="hidden";
+	  		$('#content').hide();
+	  	}
+	  });
+/*}());*/
+
+$(document).ready(function() {
+    $(document).on("contextmenu",function(e){
+       return false;
+    }); 
+}); 
+
+  </script>
+
+</body></html>
