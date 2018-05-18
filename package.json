@@ -1,0 +1,11 @@
+{
+  "name": "grabbd_project",
+  "version": "1.0.0",
+  "description": "grabbd test",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index"
+  },
+  "author": "Aditya",
+  "license": "ISC"
+}
