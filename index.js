@@ -25,7 +25,8 @@ router.get("/authuser",(req, res)=>{
 
 router.get('/home', (req, res)=>{
     console.log("welcome to homepage");
-})
+    res.json({message:"dsafa"});
+});
 
 router.post('/register', (req, res) => {
     var name = req.body.regName;
@@ -33,11 +34,11 @@ router.post('/register', (req, res) => {
     var pass = req.body.regPass;
     var confPass = req.body.regConfPass;
 
-    if(name==null || email==null || pass==null || confPass==null){
-        alert("Please enter the details");
+    if(name=="" || email=="" || pass=="" || confPass==""){
+        //alert("Please enter the details");
     }else{
-        helpers.registerUser(name, email, pass, confPass).then(()=>{
-            console.log("success");
+        helpers.registerUser(name, email, pass, confPass).then((result)=>{
+            console.log(result);
             res.redirect('../home');
         }).catch((err)=>{
             console.log(err);
@@ -53,7 +54,6 @@ router.post('/login', (req, res)=>{
         alert("please fill the details to proceed");
     }else{
         helpers.loginUser(email, pass).then(()=>{
-
             res.redirect('../home');
         }).catch((err)=>{
             console.log(err);
