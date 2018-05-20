@@ -5,10 +5,7 @@ var http = require("https");
 helpers.registerUser = (name, email, pass, confPass) => {
 
     return new Promise((resolve, reject) => {
-
         console.log("Database is connected ... nn");
-        console.log(name + ' ' + email + ' ' + pass + ' ' + confPass);
-
         var user = {
             "name": name,
             "email": email,
@@ -34,7 +31,6 @@ helpers.loginUser = (email, password) => {
                 console.log(error);
                 reject(error);
             } else {
-                console.log('solution of select query: ', result);
                 if (result.length > 0) {
                     if ([0].password == password) {
                         resolve("success");
@@ -67,7 +63,6 @@ helpers.fetchPopularMovies = () => {
 
             res.on("end", function () {
                 body = Buffer.concat(chunks);
-                console.log('body: ' + body);
                 resolve(body);
             });
         });
@@ -83,9 +78,7 @@ helpers.fetchPopularMovies = () => {
 
 helpers.searchMovie = (movieParam) => {
     return new Promise((resolve, reject) => {
-        console.log('searching movies');
         var final = movieParam.replace(/ /g,"%20");
-        console.log(final);
         var options = {
             "method": "GET",
             "hostname": "api.themoviedb.org",
@@ -106,7 +99,6 @@ helpers.searchMovie = (movieParam) => {
 
             res.on("end", function () {
                 body = Buffer.concat(chunks);
-                console.log('body: ' + body);
                 resolve(body);
             });
         });
@@ -165,7 +157,6 @@ helpers.fetchLiked = (userid)=>{
                 console.log(error);
                 reject(error);
             } else {
-                console.log('solution of fetchlike query: ', result);
                 resolve(result);
             }
         })
@@ -179,7 +170,6 @@ helpers.fetchDisLiked=(userid)=>{
                 console.log(error);
                 reject(error);
             } else {
-                console.log('solution of fetchlike query: ', result);
                 resolve(result);
             }
         })

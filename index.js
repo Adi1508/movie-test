@@ -19,25 +19,20 @@ router.use((req, res, next) => {
 });
 
 router.get("/authuser", (req, res) => {
-    console.log(path + "login-register.html");
     res.sendFile(path + "login-register.html");
 });
 var user;
 
 router.get('/home', (req, res) => {
-    console.log(req.query.user);
     user = req.query.user;
-    console.log("welcome to homepage");
     res.sendFile(path + "home.html");
 });
 
 router.get('/fetch', (req, res) => {
     var obj = {};
     var list;
-    console.log(user);
     helpers.fetchPopularMovies().then((result) => {
         list = result;
-        console.log("movieList: " + list);
         res.send(list);
     });
 });
@@ -46,11 +41,9 @@ router.get('/search', (req, res) => {
     var obj = {};
     var movieList;
     obj = req.query.param;
-    console.log('searchparam: ' + obj);
 
     helpers.searchMovie(obj).then((result) => {
         movieList = result;
-        console.log("search: " + movieList);
         res.send(movieList);
     });
 });
@@ -65,7 +58,6 @@ router.post('/register', (req, res) => {
         //alert("Please enter the details");
     } else {
         helpers.registerUser(name, email, pass, confPass).then((result) => {
-            console.log(result);
             res.redirect('../home?user='+email);
         }).catch((err) => {
             console.log(err);
@@ -76,7 +68,6 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     var email = req.body.loginEmail;
     var pass = req.body.loginPassword;
-    console.log('login: ' + email + ' ' + pass);
     if (email == "" || pass == "") {
         res.redirect('../authuser');
     } else if (email != "" && pass != "") {
@@ -99,8 +90,6 @@ router.get('/like', (req, res) => {
     var obj2;
     obj1 = user;
     obj2 = req.query.param1;
-    console.log('like data ' + obj1 + ' ' + obj2);
-
     helpers.like(obj1, obj2).then((result) => {
         console.log(result);
     })
@@ -111,9 +100,6 @@ router.get('/dislike', (req, res) => {
     var obj2;
     obj1 = user;
     obj2 = req.query.param1;
-
-    console.log('like data ' + obj1 + ' ' + obj2);
-
     helpers.dislike(obj1, obj2).then((result) => {
         console.log(result);
     });
@@ -124,7 +110,6 @@ router.get('/fetchLiked', (req, res)=>{
     var likesMovies;
     helpers.fetchLiked(userID).then((result)=>{
         likesMovies = JSON.stringify(result);
-        console.log('fetchliked: '+likesMovies);
         res.send(likesMovies);
     })
 })
@@ -134,7 +119,6 @@ router.get('/fetchDisliked', (req, res)=>{
     var dislikesMovies;
     helpers.fetchDisLiked(userID).then((result)=>{
         dislikesMovies = JSON.stringify(result);
-        console.log('fetchliked: '+dislikesMovies);
         res.send(dislikesMovies);
     })
 })
