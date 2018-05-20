@@ -69,12 +69,12 @@
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <form class="navbar-form navbar-left" role="search">
+                                <div class="navbar-form navbar-left">
                                     <div class="form-group" style='margin:auto; text-align: center'>
-                                        <input type="text" class="form-control" placeholder="Search">
+                                        <input type="text" class="form-control" id="searchMovie" placeholder="Search">
                                     </div>
-                                    <button type="submit" class="btn btn-default">Submit</button>
-                                </form>
+                                    <button type="submit" id="search" class="btn btn-default">Submit</button>
+                                </div>
                             </div>
                         </div>
 
@@ -83,10 +83,10 @@
                             <div class="col-sm-12">
                                 <div class="panel panel-warning">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title">Popular Movies</h3>
+                                        <h3 class="panel-title" id="title-heading">Popular Movies</h3>
                                     </div>
                                     <ul class="list-group" id="listMovies">
-                                        
+
                                     </ul>
                                 </div>
                             </div>
@@ -100,7 +100,9 @@
                                 <h3 class="panel-title">Liked Movies</h3>
                             </div>
                             <div class="panel-body">
-                                <%= result %>
+                                <ul class="list-group" id="likedMovies">
+
+                                </ul>
                             </div>
                         </div>
 
@@ -108,7 +110,11 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Disliked Movies</h3>
                             </div>
-                            <div class="panel-body"> Panel content </div>
+                            <div class="panel-body">
+                                <ul class="list-group" id="dislikedMovies">
+
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -119,8 +125,45 @@
 
             </div>
         </div>
+    </div>
 
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="Movie Information" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="modalTitle">Movie Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <img id="movieImage" width="200px" height="200px">
+                        </div>
 
+                        <div class="col-sm-7">
+                            <div class="row">
+                                <div class='col-sm-12'>
+                                    <p id="modalInfoTitle"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p id="modalContent"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="doLike">Like</button>
+                    <button type="submit" class="btn btn-primary" id="doDislike">Dislike</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -131,7 +174,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <!-- Include Firebase Library -->
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
-    <!-- Contacts Store JavaScript -->
 
 </body>
 
@@ -151,14 +193,12 @@
             success: function(data) {
                 console.log('success');
                 returnObject = JSON.stringify(data);
-                //console.log("returned json: "+returnObject);
-                
                 var items = [];
                  
                 var jsonData = JSON.parse(returnObject);
                 for (var i = 0; i < jsonData.results.length; i++) {
                     var counter = jsonData.results[i];
-                    items.push('<li class="list-group-item"><a >' + counter.title + '</a><span class="badge">'+counter.vote_average+'</span></li>');
+                    items.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.title +'">' + counter.title + '</a><span class="badge">'+counter.vote_average+'</span></li>');
                     console.log(counter.title);
                 }
 
@@ -168,7 +208,185 @@
                 console.log('error');
             }
         });
+
+        var data2={};
+        var returnObject2;
+        $.ajax({
+            type: 'GET',
+    		data: JSON.stringify(data2),
+            contentType: 'application/json',
+            url: 'http://localhost:8686/fetchLiked',	
+            dataType: 'json',					
+            success: function(data2) {
+                console.log('success');
+                returnObject2 = data2;
+                var items2 = [];
+                 console.log(returnObject2);
+                console.log('fetchliked; '+returnObject2[0].movie_name+' '+returnObject2.length);
+                for (var i = 0; i < returnObject2.length; i++) {
+                    var counter = returnObject2[i];
+                    items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.likes+'</span></li>');
+                    console.log('liked movies'+counter.movie_name);
+                }
+
+                $('#likedMovies').append( items2.join('') );
+            },
+            error: function(){
+                console.log('error');
+            }
+        });
+
+        var data3={};
+        var returnObject3;
+        $.ajax({
+            type: 'GET',
+    		data: JSON.stringify(data3),
+            contentType: 'application/json',
+            url: 'http://localhost:8686/fetchDisLiked',	
+            dataType: 'json',					
+            success: function(data3) {
+                console.log('success');
+                returnObject3 = data3;
+                var items3 = [];
+                 console.log(returnObject3);
+                //console.log('fetchliked; '+returnObject2[0].movie_name+' '+returnObject2.length);
+                for (var i = 0; i < returnObject3.length; i++) {
+                    var counter = returnObject3[i];
+                    items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.dislike+'</span></li>');
+                    console.log('liked movies'+counter.movie_name);
+                }
+
+                $('#dislikedMovies').append( items3.join('') );
+            },
+            error: function(){
+                console.log('error');
+            }
+        });
+
+
     });
+
+    $('#search').click(function(){
+        console.log("search method called");
+
+        
+        var returnMovies;
+
+        var movie = document.getElementById("searchMovie").value;
+        console.log('search '+movie);
+        var data={};
+        data.param = movie;
+        console.log('data: '+JSON.stringify(data));
+
+        $.ajax({
+            type:'GET',
+            data:data,
+            contentType: 'application/json',
+            url: 'http://localhost:8686/search',
+            dataType: 'json',
+            success: function(data){
+                $("#listMovies").empty();
+                $("#title-heading").val('Search Results');
+                console.log('RM');
+                returnMovies = JSON.stringify(data);
+                console.log(returnMovies);
+                
+                var items2 = [];
+                 
+                var jsonData = JSON.parse(returnMovies);
+                for (var i = 0; i < jsonData.results.length; i++) {
+                    var counter = jsonData.results[i];
+                    items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.title +'">' + counter.title + '</a><span class="badge">'+counter.vote_average+'</span></li>');
+                    console.log(counter.title);
+                }
+
+                $('#listMovies').append( items2.join('') );
+
+            }
+        })
+    });
+
+    $(document).on('shown.bs.modal', '#infoModal', function (event){
+        console.log('title movie onclick function'); 
+        var title;
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        title = button.data('whatever')
+
+        var returnInfo;
+        var data={};
+        data.param = title;
+        console.log('image-fetch title: '+JSON.stringify(data));
+
+        $.ajax({
+            type:'GET',
+            data: data,
+            contentType: 'application/json',
+            url: 'http://localhost:8686/search',
+            dataType: 'json',
+            success: function(data){
+                returnInfo = JSON.stringify(data);
+                console.log(returnInfo);
+                
+                var items2 = [];
+                 
+                var jsonData = JSON.parse(returnInfo);
+                console.log("jsonData: "+jsonData.results.length);
+                console.log("image-fetch: "+jsonData.results[0].poster_path);
+
+                $('#movieImage').attr("src","https://image.tmdb.org/t/p/w500/"+jsonData.results[0].poster_path);
+                $('#modalInfoTitle').css("font-weight","Bold");
+                $('#modalInfoTitle').text(jsonData.results[0].title+' '+jsonData.results[0].release_date);
+                $('#modalContent').text('Overview: '+jsonData.results[0].overview);
+            }
+        });
+
+        $("#doLike").click(function(){
+            console.log('like hit');
+
+            //var person = prompt("Please enter your email address");
+            var movie_name = title;
+            var like_data= {
+                param1:movie_name
+            };
+
+            $.ajax({
+            type:'GET',
+            data: like_data,
+            contentType: 'application/json',
+            url: 'http://localhost:8686/like',
+            dataType: 'json',
+                success: function(data){
+                    returnInfo = JSON.stringify(data);
+                    console.log(returnInfo);
+                    $('#infoModal').modal('hide');
+                }
+            });
+        });
+        
+        $("#doDislike").click(function(){
+            console.log('like hit');
+
+            //var person = prompt("Please enter your email address");
+            var movie_name = title;
+            var like_data= {
+                param1:movie_name
+            };
+
+            $.ajax({
+            type:'GET',
+            data: like_data,
+            contentType: 'application/json',
+            url: 'http://localhost:8686/dislike',
+            dataType: 'json',
+                success: function(data){
+                    returnInfo = JSON.stringify(data);
+                    console.log(returnInfo);
+                    $('#infoModal').modal('hide');
+                }
+            });
+        });
+    });
+
 </script>
 
 </html>
