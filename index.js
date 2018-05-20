@@ -6,27 +6,39 @@ var promise = require('promise');
 var path = __dirname + '/views/';
 var helpers = require('./helpers/dbHelper');
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var port = process.env.PORT || 8686;
 
 var router = express.Router();
 
-router.use((req, res, next)=>{
+router.use((req, res, next) => {
     console.log(req.method);
     next();
 });
 
-router.get("/authuser",(req, res)=>{
-    console.log(path+"homepage.html");
-    res.sendFile(path+"homepage.html");
+router.get("/authuser", (req, res) => {
+    console.log(path + "login-register.html");
+    res.sendFile(path + "login-register.html");
 });
 
-router.get('/home', (req, res)=>{
+router.get('/home', (req, res) => {
     console.log("welcome to homepage");
-    res.json({message:"dsafa"});
+    res.sendFile(path + "home.html");
+
 });
+
+router.get('/fetch', (req,res)=>{
+    var obj = {};
+    var list;
+    helpers.fetchPopularMovies().then((result) => {
+        list = result;
+        console.log("movieList: "+list);
+        res.send(list);
+    });
+	
+})
 
 router.post('/register', (req, res) => {
     var name = req.body.regName;
@@ -34,28 +46,28 @@ router.post('/register', (req, res) => {
     var pass = req.body.regPass;
     var confPass = req.body.regConfPass;
 
-    if(name=="" || email=="" || pass=="" || confPass==""){
+    if (name == "" || email == "" || pass == "" || confPass == "") {
         //alert("Please enter the details");
-    }else{
-        helpers.registerUser(name, email, pass, confPass).then((result)=>{
+    } else {
+        helpers.registerUser(name, email, pass, confPass).then((result) => {
             console.log(result);
             res.redirect('../home');
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
         });
     }
 });
 
-router.post('/login', (req, res)=>{
+router.post('/login', (req, res) => {
     var email = req.body.loginEmail;
     var pass = req.body.loginPassword;
 
-    if(email==null || pass==null){
+    if (email == null || pass == null) {
         alert("please fill the details to proceed");
-    }else{
-        helpers.loginUser(email, pass).then(()=>{
+    } else {
+        helpers.loginUser(email, pass).then(() => {
             res.redirect('../home');
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
         });
     }
@@ -64,4 +76,4 @@ router.post('/login', (req, res)=>{
 app.use('/', router);
 
 app.listen(port);
-console.log('Server running at port '+port);
+console.log('Server running at port ' + port);

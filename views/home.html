@@ -1,0 +1,174 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MovieTime</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <style type="text/css">
+        #contacts p,
+        #contacts p.lead {
+            margin: 0;
+        }
+
+        .authenticated {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .unauthenticated {
+            display: none;
+        }
+
+        .modal-header:last-child {
+            border-bottom: 0;
+        }
+    </style>
+</head>
+
+<body data-gr-c-s-loaded="true" class="">
+
+    <div class='row'>
+
+        <div class="col-sm-1">
+
+        </div>
+
+        <div class="col-sm-10">
+            <span class="userAuth authenticated pull-right">
+                <form action='/logout' method='post'>
+                    <button type="submit" id="log" class="btn btn-danger" style="visibility: visible;">Logout</button>
+                </form>
+            </span>
+            <h1>MovieTime</h1>
+            <hr>
+        </div>
+
+        <div class="col-sm-1">
+
+        </div>
+
+    </div>
+
+    <div id="content">
+
+        <div class="row">
+            <div class="col-sm-1">
+
+            </div>
+
+            <div class="col-sm-10">
+
+                <div class="row">
+
+                    <div class="col-sm-8">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form class="navbar-form navbar-left" role="search">
+                                    <div class="form-group" style='margin:auto; text-align: center'>
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-12">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Popular Movies</h3>
+                                    </div>
+                                    <ul class="list-group" id="listMovies">
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Liked Movies</h3>
+                            </div>
+                            <div class="panel-body">
+                                <%= result %>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Disliked Movies</h3>
+                            </div>
+                            <div class="panel-body"> Panel content </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-1">
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- Latest compiled and minified Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Include Firebase Library -->
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+    <!-- Contacts Store JavaScript -->
+
+</body>
+
+<script type="text/JavaScript">
+    $( document ).ready(function() {
+        console.log( "document loaded" );
+
+        var data = {};
+        var returnObject;
+					
+		$.ajax({
+            type: 'GET',
+    		data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: 'http://localhost:8686/fetch',	
+            dataType: 'json',					
+            success: function(data) {
+                console.log('success');
+                returnObject = JSON.stringify(data);
+                //console.log("returned json: "+returnObject);
+                
+                var items = [];
+                 
+                var jsonData = JSON.parse(returnObject);
+                for (var i = 0; i < jsonData.results.length; i++) {
+                    var counter = jsonData.results[i];
+                    items.push('<li class="list-group-item"><a >' + counter.title + '</a><span class="badge">'+counter.vote_average+'</span></li>');
+                    console.log(counter.title);
+                }
+
+                $('#listMovies').append( items.join('') );
+            },
+            error: function(){
+                console.log('error');
+            }
+        });
+    });
+</script>
+
+</html>
