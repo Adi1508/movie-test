@@ -188,7 +188,7 @@
             type: 'GET',
     		data: JSON.stringify(data),
             contentType: 'application/json',
-            url: 'http://localhost:8686/fetch',	
+            url: 'http://movietestv1.herokuapp.com/fetch',	
             dataType: 'json',					
             success: function(data) {
                 console.log('success');
@@ -215,7 +215,7 @@
             type: 'GET',
     		data: JSON.stringify(data2),
             contentType: 'application/json',
-            url: 'http://localhost:8686/fetchLiked',	
+            url: 'http://movietestv1.herokuapp.com/fetchLiked',	
             dataType: 'json',					
             success: function(data2) {
                 console.log('success');
@@ -242,7 +242,7 @@
             type: 'GET',
     		data: JSON.stringify(data3),
             contentType: 'application/json',
-            url: 'http://localhost:8686/fetchDisLiked',	
+            url: 'http://movietestv1.herokuapp.com/fetchDisLiked',	
             dataType: 'json',					
             success: function(data3) {
                 console.log('success');
@@ -282,7 +282,7 @@
             type:'GET',
             data:data,
             contentType: 'application/json',
-            url: 'http://localhost:8686/search',
+            url: 'http://movietestv1.herokuapp.com/search',
             dataType: 'json',
             success: function(data){
                 $("#listMovies").empty();
@@ -321,7 +321,7 @@
             type:'GET',
             data: data,
             contentType: 'application/json',
-            url: 'http://localhost:8686/search',
+            url: 'http://movietestv1.herokuapp.com/search',
             dataType: 'json',
             success: function(data){
                 returnInfo = JSON.stringify(data);
@@ -353,12 +353,40 @@
             type:'GET',
             data: like_data,
             contentType: 'application/json',
-            url: 'http://localhost:8686/like',
+            url: 'http://movietestv1.herokuapp.com/like',
             dataType: 'json',
                 success: function(data){
                     returnInfo = JSON.stringify(data);
-                    console.log(returnInfo);
+                    console.log(returnInfo);           
+                }
+            });
+
+            var data2={};
+            var returnObject2;
+            $.ajax({
+                type: 'GET',
+                data: JSON.stringify(data2),
+                contentType: 'application/json',
+                url: 'http://movietestv1.herokuapp.com/fetchLiked',	
+                dataType: 'json',					
+                success: function(data2) {
+                    $("#likedMovies").empty();
+                    console.log('success');
+                    returnObject2 = data2;
+                    var items2 = [];
+                    console.log(returnObject2);
+                    console.log('fetchliked; '+returnObject2[0].movie_name+' '+returnObject2.length);
+                    for (var i = 0; i < returnObject2.length; i++) {
+                        var counter = returnObject2[i];
+                        items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.likes+'</span></li>');
+                        console.log('liked movies'+counter.movie_name);
+                    }
+
+                    $('#likedMovies').append( items2.join('') );
                     $('#infoModal').modal('hide');
+                },
+                error: function(){
+                    console.log('error');
                 }
             });
         });
@@ -376,12 +404,40 @@
             type:'GET',
             data: like_data,
             contentType: 'application/json',
-            url: 'http://localhost:8686/dislike',
+            url: 'http://movietestv1.herokuapp.com/dislike',
             dataType: 'json',
                 success: function(data){
                     returnInfo = JSON.stringify(data);
                     console.log(returnInfo);
+                }
+            });
+
+            var data3={};
+            var returnObject3;
+            $.ajax({
+                type: 'GET',
+                data: JSON.stringify(data3),
+                contentType: 'application/json',
+                url: 'http://movietestv1.herokuapp.com/fetchDisLiked',	
+                dataType: 'json',					
+                success: function(data3) {
+                    $("#dislikedMovies").empty();
+                    console.log('success');
+                    returnObject3 = data3;
+                    var items3 = [];
+                    console.log(returnObject3);
+                    //console.log('fetchliked; '+returnObject2[0].movie_name+' '+returnObject2.length);
+                    for (var i = 0; i < returnObject3.length; i++) {
+                        var counter = returnObject3[i];
+                        items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.dislike+'</span></li>');
+                        console.log('liked movies'+counter.movie_name);
+                    }
+
+                    $('#dislikedMovies').append( items3.join('') );
                     $('#infoModal').modal('hide');
+                },
+                error: function(){
+                    console.log('error');
                 }
             });
         });
