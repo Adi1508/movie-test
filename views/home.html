@@ -188,7 +188,7 @@
             type: 'GET',
     		data: JSON.stringify(data),
             contentType: 'application/json',
-            url: 'http://movietestv1.herokuapp.com/fetch',	
+            url: 'https://movietestv1.herokuapp.com/fetch',	
             dataType: 'json',					
             success: function(data) {
                 console.log('success');
@@ -215,7 +215,7 @@
             type: 'GET',
     		data: JSON.stringify(data2),
             contentType: 'application/json',
-            url: 'http://movietestv1.herokuapp.com/fetchLiked',	
+            url: 'https://movietestv1.herokuapp.com/fetchLiked',	
             dataType: 'json',					
             success: function(data2) {
                 console.log('success');
@@ -242,7 +242,7 @@
             type: 'GET',
     		data: JSON.stringify(data3),
             contentType: 'application/json',
-            url: 'http://movietestv1.herokuapp.com/fetchDisLiked',	
+            url: 'https://movietestv1.herokuapp.com/fetchDisLiked',	
             dataType: 'json',					
             success: function(data3) {
                 console.log('success');
@@ -282,7 +282,7 @@
             type:'GET',
             data:data,
             contentType: 'application/json',
-            url: 'http://movietestv1.herokuapp.com/search',
+            url: 'https://movietestv1.herokuapp.com/search',
             dataType: 'json',
             success: function(data){
                 $("#listMovies").empty();
@@ -321,7 +321,7 @@
             type:'GET',
             data: data,
             contentType: 'application/json',
-            url: 'http://movietestv1.herokuapp.com/search',
+            url: 'https://movietestv1.herokuapp.com/search',
             dataType: 'json',
             success: function(data){
                 returnInfo = JSON.stringify(data);
@@ -353,7 +353,7 @@
             type:'GET',
             data: like_data,
             contentType: 'application/json',
-            url: 'http://movietestv1.herokuapp.com/like',
+            url: 'https://movietestv1.herokuapp.com/like',
             dataType: 'json',
                 success: function(data){
                     returnInfo = JSON.stringify(data);
@@ -367,7 +367,7 @@
                 type: 'GET',
                 data: JSON.stringify(data2),
                 contentType: 'application/json',
-                url: 'http://movietestv1.herokuapp.com/fetchLiked',	
+                url: 'https://movietestv1.herokuapp.com/fetchLiked',	
                 dataType: 'json',					
                 success: function(data2) {
                     $("#likedMovies").empty();
@@ -404,7 +404,7 @@
             type:'GET',
             data: like_data,
             contentType: 'application/json',
-            url: 'http://movietestv1.herokuapp.com/dislike',
+            url: 'https://movietestv1.herokuapp.com/dislike',
             dataType: 'json',
                 success: function(data){
                     returnInfo = JSON.stringify(data);
@@ -418,7 +418,7 @@
                 type: 'GET',
                 data: JSON.stringify(data3),
                 contentType: 'application/json',
-                url: 'http://movietestv1.herokuapp.com/fetchDisLiked',	
+                url: 'https://movietestv1.herokuapp.com/fetchDisLiked',	
                 dataType: 'json',					
                 success: function(data3) {
                     $("#dislikedMovies").empty();
