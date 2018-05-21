@@ -211,23 +211,23 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="modalTitle">Movie Information</h4>
+                    <h4 class="modal-title" id="like-dislike-modalTitle">Movie Information</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-5">
-                            <img id="movieImage" width="200px" height="200px">
+                            <img id="like-dislike-movieImage" width="200px" height="200px">
                         </div>
 
                         <div class="col-sm-7">
                             <div class="row">
                                 <div class='col-sm-12'>
-                                    <p id="modalInfoTitle"></p>
+                                    <p id="like-dislike-modalInfoTitle"></p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <p id="modalContent"></p>
+                                    <p id="like-dislike-modalContent"></p>
                                 </div>
                             </div>
                         </div>
@@ -302,6 +302,33 @@
                     console.log('error');
                 }
             });
+    });
+
+    $(document).on('shown.bs.modal', '#like-dislike-Modal', function (event){
+        var title2;
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        title2 = button.data('whatever')
+        var returnInfo;
+        var data={};
+        data.param = title2;
+        var jsonData;
+        $.ajax({
+            type:'GET',
+            data: data,
+            contentType: 'application/json',
+            url: 'https://movietestv1.herokuapp.com/search',
+            dataType: 'json',
+            success: function(data){
+                returnInfo = JSON.stringify(data);
+                var items2 = [];
+                 
+                jsonData = JSON.parse(returnInfo);
+                $('#like-dislike-movieImage').attr("src","https://image.tmdb.org/t/p/w500/"+jsonData.results[0].poster_path);
+                $('#like-dislike-modalInfoTitle').css("font-weight","Bold");
+                $('#like-dislike-modalInfoTitle').text(jsonData.results[0].title+' '+jsonData.results[0].release_date);
+                $('#like-dislike-modalContent').text('Overview: '+jsonData.results[0].overview);
+            }
+        });
     });
 
     $("#sort").click(function(){
