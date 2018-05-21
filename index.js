@@ -120,8 +120,12 @@ router.get('/fetchDisliked', (req, res)=>{
     helpers.fetchDisLiked(userID).then((result)=>{
         dislikesMovies = JSON.stringify(result);
         res.send(dislikesMovies);
-    })
-})
+    });
+});
+
+router.get('/', (req, res)=>{
+    res.redirect('../authuser');
+});
 
 app.use('/', router);
 
