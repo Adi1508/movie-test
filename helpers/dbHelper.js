@@ -87,8 +87,6 @@ helpers.searchMovie = (movieParam) => {
             "headers": {}
         };
 
-        console.log(options);
-
         var body = null;
         var req = http.request(options, function (res) {
             var chunks = [];
@@ -115,33 +113,17 @@ helpers.searchMovie = (movieParam) => {
 helpers.like = (userid, moviename)=>{
     return new Promise((resolve, reject)=>{
         
-
-        var count;
-        var getlikes = {
-            "userid":userid,
-            "movie_name": moviename
-        }
-
-        db.query('SELECT likes from userLike where userid = ? and movie_name = ?', getlikes, (error, results, fields)=>{
-            if (error) {
-                console.log("error occured");
-                reject(error);
-            } else {
-                count=result;
-            }
-        })
-
         count=count+1;
-
+        console.log()
         var user = {
             "userid": userid,
-            "movie_name": moviename,
-            "likes": count
+            "moviename": moviename,
+            "likes": 1
         }
 
         db.query('INSERT into userLike SET ?', user, (error, results, fields) => {
             if (error) {
-                console.log("error occured");
+                console.log("line 145 insert error occured");
                 reject(error);
             } else {
                 resolve(results);
@@ -152,27 +134,11 @@ helpers.like = (userid, moviename)=>{
 
 helpers.dislike = (userid, moviename)=>{
     return new Promise((resolve, reject)=>{
-        var count;
-        var getdislikes = {
-            "userid":userid,
-            "movie_name": moviename
-        }
-
-        db.query('SELECT dislike from userLike where userid = ? and movie_name = ?', getdislikes, (error, results, fields)=>{
-            if (error) {
-                console.log("error occured");
-                reject(error);
-            } else {
-                count=result;
-            }
-        })
-
-        count=count+1;
 
         var user = {
             "userid": userid,
             "movie_name": moviename,
-            "dislike": count
+            "dislike": 1
         }
 
         db.query('INSERT into userLike SET ?', user, (error, results, fields) => {
@@ -189,7 +155,7 @@ helpers.dislike = (userid, moviename)=>{
 helpers.fetchLiked = (userid)=>{
     return new Promise((resolve, reject)=>{
 
-        db.query('SELECT * from userLike where userid = ? and likes IS NOT NULL', userid, (error, result, fields) => {
+        db.query('SELECT * from userLike where userid = ? and likes = 1', userid, (error, result, fields) => {
             if (error) {
                 console.log(error);
                 reject(error);
@@ -202,7 +168,7 @@ helpers.fetchLiked = (userid)=>{
 
 helpers.fetchDisLiked=(userid)=>{
     return new Promise((resolve, reject)=>{
-        db.query('SELECT * from userLike where userid = ? and dislike IS NOT NULL', userid, (error, result, fields) => {
+        db.query('SELECT * from userLike where userid = ? and dislike = 1', userid, (error, result, fields) => {
             if (error) {
                 console.log(error);
                 reject(error);

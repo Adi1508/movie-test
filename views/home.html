@@ -215,7 +215,7 @@
                 var items2 = [];
                 for (var i = 0; i < returnObject2.length; i++) {
                     var counter = returnObject2[i];
-                    items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.likes+'</span></li>');
+                    items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.likes+'</span></li>');
                 }
 
                 $('#likedMovies').append( items2.join('') );
@@ -238,7 +238,7 @@
                 var items3 = [];
                 for (var i = 0; i < returnObject3.length; i++) {
                     var counter = returnObject3[i];
-                    items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.dislike+'</span></li>');
+                    items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.dislike+'</span></li>');
                 }
 
                 $('#dislikedMovies').append( items3.join('') );
@@ -334,7 +334,7 @@
                     var items2 = [];
                     for (var i = 0; i < returnObject2.length; i++) {
                         var counter = returnObject2[i];
-                        items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.likes+'</span></li>');
+                        items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.likes+'</span></li>');
                     }
 
                     $('#likedMovies').append( items2.join('') );
@@ -374,9 +374,10 @@
                     $("#dislikedMovies").empty();
                     returnObject3 = data3;
                     var items3 = [];
+                    console.log(returnObject3);
                     for (var i = 0; i < returnObject3.length; i++) {
                         var counter = returnObject3[i];
-                        items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.movie_name +'">' + counter.movie_name + '</a><span class="badge">'+counter.dislike+'</span></li>');
+                        items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.dislike+'</span></li>');
                     }
                     $('#dislikedMovies').append( items3.join('') );
                     $('#infoModal').modal('hide');
