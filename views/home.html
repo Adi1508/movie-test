@@ -83,7 +83,23 @@
                             <div class="col-sm-12">
                                 <div class="panel panel-warning">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title" id="title-heading">Popular Movies</h3>
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <h3 class="panel-title" id="title-heading">Movies List</h3>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <a href="#" id="sort" data-toggle="tooltip" title="Sort Data By Votes">
+                                                    <span class="glyphicon glyphicon-sort"></span>
+                                                </a>
+                                            </div>
+
+                                            <div class="col-sm-2">
+                                                <a href="#" id="refresh-list" data-toggle="tooltip" title="Clear Results">
+                                                    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                                                </a>
+                                            </div>
+
+                                        </div>
                                     </div>
                                     <ul class="list-group" id="listMovies">
 
@@ -97,7 +113,17 @@
                     <div class="col-sm-4">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Liked Movies</h3>
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <h3 class="panel-title">Liked Movies</h3>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="#" id="sortLike" data-toggle="tooltip" title="Sort Data By Votes">
+                                            <span style="color:white" class="glyphicon glyphicon-sort"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="panel-body">
                                 <ul class="list-group" id="likedMovies">
@@ -108,7 +134,18 @@
 
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Disliked Movies</h3>
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <h3 class="panel-title">Disliked Movies</h3>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <a href="#" id="sortDislike" data-toggle="tooltip" title="Sort Data By Votes">
+                                            <span style="color:white" class="glyphicon glyphicon-sort"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="panel-body">
                                 <ul class="list-group" id="dislikedMovies">
@@ -166,6 +203,40 @@
         </div>
     </div>
 
+    <div class="modal fade" id="like-dislike-Modal" tabindex="-1" role="dialog" aria-labelledby="Movie Information" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="modalTitle">Movie Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <img id="movieImage" width="200px" height="200px">
+                        </div>
+
+                        <div class="col-sm-7">
+                            <div class="row">
+                                <div class='col-sm-12'>
+                                    <p id="modalInfoTitle"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p id="modalContent"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -176,6 +247,119 @@
 </body>
 
 <script type="text/JavaScript">
+
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+
+    $("#sortLike").click(function(){
+        var data2={};
+            var returnObject2;
+            $.ajax({
+                type: 'GET',
+                data: JSON.stringify(data2),
+                contentType: 'application/json',
+                url: 'https://movietestv1.herokuapp.com/sortLiked',	
+                dataType: 'json',					
+                success: function(data2) {
+                    $("#likedMovies").empty();
+                    returnObject2 = data2;
+                    var items2 = [];
+                    for (var i = 0; i < returnObject2.length; i++) {
+                        var counter = returnObject2[i];
+                        items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#like-dislike-Modal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.votes+'</span></li>');
+                    }
+
+                    $('#likedMovies').append( items2.join('') );
+                },
+                error: function(){
+                    console.log('error');
+                }
+            });
+    });
+
+    $("#sortDislike").click(function(){
+        var data3={};
+            var returnObject3;
+            $.ajax({
+                type: 'GET',
+                data: JSON.stringify(data3),
+                contentType: 'application/json',
+                url: 'https://movietestv1.herokuapp.com/sortDisLiked',	
+                dataType: 'json',					
+                success: function(data3) {
+                    $("#dislikedMovies").empty();
+                    returnObject3 = data3;
+                    var items3 = [];
+                    console.log(returnObject3);
+                    for (var i = 0; i < returnObject3.length; i++) {
+                        var counter = returnObject3[i];
+                        items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#like-dislike-Modal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.votes+'</span></li>');
+                    }
+                    $('#dislikedMovies').append( items3.join('') );
+                },
+                error: function(){
+                    console.log('error');
+                }
+            });
+    });
+
+    $("#sort").click(function(){
+        var data = {};
+        var returnObject;
+		$.ajax({
+            type: 'GET',
+    		data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: 'https://movietestv1.herokuapp.com/sort',	
+            dataType: 'json',					
+            success: function(data) {
+                $("#listMovies").empty();
+                returnObject = JSON.stringify(data);
+                var items = [];
+                 
+                var jsonData = JSON.parse(returnObject);
+                for (var i = 0; i < jsonData.results.length; i++) {
+                    var counter = jsonData.results[i];
+                    items.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.title +'">' + counter.title + '</a><span class="badge">'+counter.vote_average+'</span></li>');
+                }
+
+                $('#listMovies').append( items.join('') );
+            },
+            error: function(){
+                console.log('error');
+            }
+        });
+    });
+
+    $("#refresh-list").click(function(){
+        var data = {};
+        var returnObject;
+		$.ajax({
+            type: 'GET',
+    		data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: 'https://movietestv1.herokuapp.com/fetch',	
+            dataType: 'json',					
+            success: function(data) {
+                $("#listMovies").empty();
+                returnObject = JSON.stringify(data);
+                var items = [];
+                 
+                var jsonData = JSON.parse(returnObject);
+                for (var i = 0; i < jsonData.results.length; i++) {
+                    var counter = jsonData.results[i];
+                    items.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.title +'">' + counter.title + '</a><span class="badge">'+counter.vote_average+'</span></li>');
+                }
+
+                $('#listMovies').append( items.join('') );
+            },
+            error: function(){
+                console.log('error');
+            }
+        });
+    });
+
     $( document ).ready(function() {
         var data = {};
         var returnObject;
@@ -186,6 +370,7 @@
             url: 'https://movietestv1.herokuapp.com/fetch',	
             dataType: 'json',					
             success: function(data) {
+                $("#listMovies").empty();
                 returnObject = JSON.stringify(data);
                 var items = [];
                  
@@ -194,7 +379,6 @@
                     var counter = jsonData.results[i];
                     items.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.title +'">' + counter.title + '</a><span class="badge">'+counter.vote_average+'</span></li>');
                 }
-
                 $('#listMovies').append( items.join('') );
             },
             error: function(){
@@ -215,7 +399,7 @@
                 var items2 = [];
                 for (var i = 0; i < returnObject2.length; i++) {
                     var counter = returnObject2[i];
-                    items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.likes+'</span></li>');
+                    items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#like-dislike-Modal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.votes+'</span></li>');
                 }
 
                 $('#likedMovies').append( items2.join('') );
@@ -238,7 +422,7 @@
                 var items3 = [];
                 for (var i = 0; i < returnObject3.length; i++) {
                     var counter = returnObject3[i];
-                    items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.dislike+'</span></li>');
+                    items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#like-dislike-Modal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.votes+'</span></li>');
                 }
 
                 $('#dislikedMovies').append( items3.join('') );
@@ -277,14 +461,15 @@
             }
         })
     });
-
+    var title;
+    var vote;
     $(document).on('shown.bs.modal', '#infoModal', function (event){
-        var title;
         var button = $(event.relatedTarget) // Button that triggered the modal
         title = button.data('whatever')
         var returnInfo;
         var data={};
         data.param = title;
+        var jsonData;
         $.ajax({
             type:'GET',
             data: data,
@@ -295,18 +480,21 @@
                 returnInfo = JSON.stringify(data);
                 var items2 = [];
                  
-                var jsonData = JSON.parse(returnInfo);
+                jsonData = JSON.parse(returnInfo);
                 $('#movieImage').attr("src","https://image.tmdb.org/t/p/w500/"+jsonData.results[0].poster_path);
                 $('#modalInfoTitle').css("font-weight","Bold");
                 $('#modalInfoTitle').text(jsonData.results[0].title+' '+jsonData.results[0].release_date);
                 $('#modalContent').text('Overview: '+jsonData.results[0].overview);
+                vote = jsonData.results[0].vote_count;
             }
         });
+    });
 
         $("#doLike").click(function(){
             var movie_name = title;
             var like_data= {
-                param1:movie_name
+                param1:movie_name,
+                param2:vote
             };
 
             $.ajax({
@@ -334,11 +522,11 @@
                     var items2 = [];
                     for (var i = 0; i < returnObject2.length; i++) {
                         var counter = returnObject2[i];
-                        items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.likes+'</span></li>');
+                        items2.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#like-dislike-Modal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.votes+'</span></li>');
                     }
 
                     $('#likedMovies').append( items2.join('') );
-                    $('#infoModal').modal('hide');
+                    $('#like-dislike-Modal').modal('hide');
                 },
                 error: function(){
                     console.log('error');
@@ -349,7 +537,8 @@
         $("#doDislike").click(function(){
             var movie_name = title;
             var like_data= {
-                param1:movie_name
+                param1:movie_name,
+                param2:vote
             };
             $.ajax({
             type:'GET',
@@ -377,17 +566,17 @@
                     console.log(returnObject3);
                     for (var i = 0; i < returnObject3.length; i++) {
                         var counter = returnObject3[i];
-                        items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#infoModal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.dislike+'</span></li>');
+                        items3.push('<li class="list-group-item"><a href="#" id="titleMovie" data-toggle="modal" data-target="#like-dislike-Modal" data-whatever="'+ counter.moviename +'">' + counter.moviename + '</a><span class="badge">'+counter.votes+'</span></li>');
                     }
                     $('#dislikedMovies').append( items3.join('') );
-                    $('#infoModal').modal('hide');
+                    $('#like-dislike-Modal').modal('hide');
                 },
                 error: function(){
                     console.log('error');
                 }
             });
         });
-    });
+    
 
 </script>
 

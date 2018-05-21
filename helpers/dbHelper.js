@@ -78,12 +78,12 @@ helpers.fetchPopularMovies = () => {
 
 helpers.searchMovie = (movieParam) => {
     return new Promise((resolve, reject) => {
-        var final = movieParam.replace(/ /g,"%20");
+        var final = movieParam.replace(/ /g, "%20");
         var options = {
             "method": "GET",
             "hostname": "api.themoviedb.org",
             "port": null,
-            "path": "/3/search/movie?page=1&query="+final+"&language=en-US&api_key=8e1388ceecf3090f0ae4488199df1d8a",
+            "path": "/3/search/movie?page=1&query=" + final + "&language=en-US&api_key=8e1388ceecf3090f0ae4488199df1d8a",
             "headers": {}
         };
 
@@ -110,15 +110,15 @@ helpers.searchMovie = (movieParam) => {
     });
 }
 
-helpers.like = (userid, moviename)=>{
-    return new Promise((resolve, reject)=>{
-        
-        count=count+1;
+helpers.like = (userid, moviename, vote) => {
+    return new Promise((resolve, reject) => {
+
         console.log()
         var user = {
             "userid": userid,
             "moviename": moviename,
-            "likes": 1
+            "likes": 1,
+            "votes": vote
         }
 
         db.query('INSERT into userLike SET ?', user, (error, results, fields) => {
@@ -132,13 +132,14 @@ helpers.like = (userid, moviename)=>{
     });
 }
 
-helpers.dislike = (userid, moviename)=>{
-    return new Promise((resolve, reject)=>{
+helpers.dislike = (userid, moviename, vote) => {
+    return new Promise((resolve, reject) => {
 
         var user = {
             "userid": userid,
-            "movie_name": moviename,
-            "dislike": 1
+            "moviename": moviename,
+            "dislike": 1,
+            "votes": vote
         }
 
         db.query('INSERT into userLike SET ?', user, (error, results, fields) => {
@@ -152,8 +153,8 @@ helpers.dislike = (userid, moviename)=>{
     });
 }
 
-helpers.fetchLiked = (userid)=>{
-    return new Promise((resolve, reject)=>{
+helpers.fetchLiked = (userid) => {
+    return new Promise((resolve, reject) => {
 
         db.query('SELECT * from userLike where userid = ? and likes = 1', userid, (error, result, fields) => {
             if (error) {
@@ -166,8 +167,8 @@ helpers.fetchLiked = (userid)=>{
     })
 }
 
-helpers.fetchDisLiked=(userid)=>{
-    return new Promise((resolve, reject)=>{
+helpers.fetchDisLiked = (userid) => {
+    return new Promise((resolve, reject) => {
         db.query('SELECT * from userLike where userid = ? and dislike = 1', userid, (error, result, fields) => {
             if (error) {
                 console.log(error);
@@ -178,5 +179,61 @@ helpers.fetchDisLiked=(userid)=>{
         })
     })
 }
+
+helpers.sortLike = () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * from userLike where likes = 1 order by votes desc', (error, result, fields)=> {
+            if(error){
+                reject(error);
+            }else{
+                resolve(result);
+            }
+        });
+    });
+}
+
+helpers.sortDislike = () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * from userLike where dislike = 1 order by votes desc', (error, result, fields)=> {
+            if(error){
+                reject(error);
+            }else{
+                resolve(result);
+            }
+        });
+    });
+}
+
+helpers.sortList = () => {
+    return new Promise((resolve, reject) => {
+        var options = {
+            "method": "GET",
+            "hostname": "api.themoviedb.org",
+            "port": null,
+            "path": "/3/movie/popular?page=1&language=en-US&api_key=8e1388ceecf3090f0ae4488199df1d8a",
+            "headers": {}
+        };
+
+        var req = http.request(options, function (res) {
+            var chunks = [];
+
+            res.on("data", function (chunk) {
+                chunks.push(chunk);
+            });
+
+            res.on("end", function () {
+                var body = Buffer.concat(chunks);
+                resolve(body);
+            });
+        });
+        req.on('error', function (e) {
+            reject(e);
+        });
+        req.write("{}");
+        req.end();
+    }).catch((error) => {
+        assert.isNotOk(error, 'Promise error');
+    });
+};
 
 module.exports = helpers;

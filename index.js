@@ -88,9 +88,11 @@ router.post('/logout', (req, res) => {
 router.get('/like', (req, res) => {
     var obj1;
     var obj2;
+    var obj3;
+    obj3 = req.query.param2;
     obj1 = user;
     obj2 = req.query.param1;
-    helpers.like(obj1, obj2).then((result) => {
+    helpers.like(obj1, obj2, obj3).then((result) => {
         console.log(result);
     })
 })
@@ -98,9 +100,11 @@ router.get('/like', (req, res) => {
 router.get('/dislike', (req, res) => {
     var obj1;
     var obj2;
+    var obj3;
+    obj3 = req.query.param2;
     obj1 = user;
     obj2 = req.query.param1;
-    helpers.dislike(obj1, obj2).then((result) => {
+    helpers.dislike(obj1, obj2, obj3).then((result) => {
         console.log(result);
     });
 });
@@ -120,6 +124,28 @@ router.get('/fetchDisliked', (req, res)=>{
     helpers.fetchDisLiked(userID).then((result)=>{
         dislikesMovies = JSON.stringify(result);
         res.send(dislikesMovies);
+    });
+});
+
+router.get('/sort', (req, res)=>{
+    helpers.sortList().then((result)=>{
+        res.send(result);
+    });
+});
+
+router.get('/sortLiked', (req, res)=>{
+    var sortLikes;
+    helpers.sortLike().then((result)=>{
+        sortLikes = JSON.stringify(result);
+        res.send(sortLikes);
+    });
+});
+
+router.get('/sortDisliked', (req, res)=>{
+    var sortDislikes;
+    helpers.sortDislike().then((result)=>{
+        sortDislikes = JSON.stringify(result);
+        res.send(sortDislikes);
     });
 });
 
